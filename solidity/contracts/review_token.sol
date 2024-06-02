@@ -9,7 +9,9 @@ contract RewardToken is ERC20, Ownable {
         
     }
 
-    function mint(uint256 amount) public onlyOwner {
+    function mint(uint256 amount) public  {
         _mint(msg.sender, amount);
     }
+    
+
 }

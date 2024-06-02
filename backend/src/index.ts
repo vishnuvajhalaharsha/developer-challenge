@@ -14,10 +14,10 @@ import  Rating from "./models/MovieRating";
 const PORT = 4001;
 const HOST = "http://localhost:8000";
 const NAMESPACE = "default";
-const SIMPLE_STORAGE_ADDRESS = "0xe56cBa995c50E3BB5E904F2564af02817E7B57F1";
+const SIMPLE_STORAGE_ADDRESS = "0x33221CeF190bEC4fcD58d287ae1A07A8a761EbBd";
 const TOKEN_ADDRESS = "0x4a2b84c4F572515552f32B2a0725b1029b5f76e8";
 const REVIEW_ADDRESS="0xF2245cF71fAef6f4C346416c1EaFDb67322c2CAa"
-const REWARD_ADDRESS="0xeb2aefB9FC99F8dD58D689ff95853A45D93e89B2"
+const REWARD_ADDRESS="0xaf73471f0234FEE64A629c9AC5c17776C37721c3"
 const app = express();
 const firefly = new FireFly({
   host: HOST,
@@ -35,42 +35,23 @@ const ssFfiName: string = `simpleStorageAndReviewFFI-${ffiAndApiVersion}`;
 const ssApiName: string = `simpleStorageAndReviewApi-${ffiAndApiVersion}`;
 const tokenFfiName: string = `tokenFFI-${ffiAndApiVersion}`;
 const tokenApiName: string = `tokenApi-${ffiAndApiVersion}`;
-const rewardName:string =`reviewStorageFFI-${ffiAndApiVersion}`
-const rewardApiName:string =`reviewStorageApi-${ffiAndApiVersion}`
+const rewardName:string =`rewardStorageFFI-${ffiAndApiVersion}`
+const rewardApiName:string =`rewardStorageApi-${ffiAndApiVersion}`
 
 
-const fireflyAccounts: any =  [
-  {
-    address: "0xe94c9f9a083573b6488c0e4150f95c076e3d23c1",
-    privateKey: "fca3173e2644a2ff8601acf80b75dfdbfa0f5555d212a8aba9db7561a4e14330"
-  },
-  {
-    address: "0xc4a4deda17bad6ba8088a2bb8d97957d7447d52b",
-    privateKey: "ef4a451a5ca07a2f828e703becc54e3e3ade31fc59bb7d0e756293d0a9138f8e"
-  },
-  {
-    address: "0x94f47bd486528a816a57912f6ad3c335bdfe422b",
-    privateKey: "3f3142e0eed2fea3d966ae0fb36beadaafc3177380431824b903873e1e894017"
-  },
-  {
-    address: "0x686be0d2a54cede3fa6a1334955b9fbbc084b89b",
-    privateKey: "6dc8cfe9013e830b9267d49fa8899247825f59fd38901dae3ff1935c6e420384"
-  }
-];
 
 
 app.use(bodyparser.json());
 
 app.get('/api/bal', async (req, res) => {
-  
-  try {
-    const balances = await firefly.getTokenBalances({
-      key: '0x0a636479c0a9bc1941387ecdf4790be036152caa',
-    });
-    res.status(200).json(balances);
-  } catch (error: any) {
-    res.status(500).json({ error: error.message });
-  }
+  const balance = await firefly.queryContractAPI(rewardApiName, 'balanceOf',
+    // Generate a unique idempotency key if needed
+  {  input: { account: '0x17d596f367e3f6a6fba8d0ae4f4bbad2fc07c0cc' },
+    key: '0x17d596f367e3f6a6fba8d0ae4f4bbad2fc07c0cc',
+    options: {}}
+  );
+  res.status(200).json({ balance });
+
 });
 
 
@@ -107,7 +88,8 @@ app.post('/api/movie-rating', async (req, res) => {
      await firefly.invokeContractAPI(rewardApiName,'mint',{
       input:{
         amount:rewardAmount
-      }
+      },
+      key:ethId
      })
 
 

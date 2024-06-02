@@ -1,14 +1,15 @@
 {
-  "name": "kaleido-developer-challenge-solidity",
-  "scripts": {
-    "compile": "hardhat compile",
-    "test": "hardhat test --network hardhat"
-  },
-  "devDependencies": {
-    "@nomicfoundation/hardhat-toolbox": "^2.0.2",
-    "hardhat": "^2.22.3"
-  },
-  "dependencies": {
-    "@openzeppelin/contracts": "^4.9.6"
+    "name": "kaleido-developer-challenge-solidity",
+    "scripts": {
+      "compile": "hardhat compile",
+      "test": "hardhat test --network hardhat"
+    },
+    "devDependencies": {
+      "@nomicfoundation/hardhat-toolbox": "^2.0.2",
+      "hardhat": "^2.22.3"
+    },
+    "dependencies": {
+      "@openzeppelin/contracts": "^4.9.6"
+    }
   }
-}
+  
